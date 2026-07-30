@@ -1,11 +1,8 @@
 import { Router } from "express";
+import TransactionRoute from "../modules/transaction/transaction.routes.js"
 
 const router = Router();
 
-router.get("/transaction", (req,res)=>(
-    res.json({
-        message: "well done"
-    })
-))
+router.use("/transaction", TransactionRoute)
 
 export default router
