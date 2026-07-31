@@ -8,6 +8,13 @@
       "when": 1785449149244,
       "tag": "0000_wise_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785533117195,
+      "tag": "0001_ordinary_xavin",
+      "breakpoints": true
     }
   ]
 }
