@@ -15,6 +15,13 @@
       "when": 1785533117195,
       "tag": "0001_ordinary_xavin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785614300981,
+      "tag": "0002_charming_ulik",
+      "breakpoints": true
     }
   ]
 }

@@ -3,7 +3,7 @@ import { ENV } from './src/config/env';
 
 
 export default defineConfig({
-  schema: ["./src/db/schema/auth-schema.ts", "./src/db/schema/transaction-schema.ts"],
+  schema: "./src/db/schema/**.*.ts",
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials:{
