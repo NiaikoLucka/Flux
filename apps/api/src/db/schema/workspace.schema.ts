@@ -9,7 +9,7 @@ export const workspace = pgTable("workspace", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   currency: currencyEnum("currency").default("MGA").notNull(),
-  ownerId: text("owner_id")
+  createdBy: text("created_By")
     .notNull()
     .references(() => user.id, {
       onDelete: "cascade",
@@ -53,7 +53,7 @@ export const workspaceMember = pgTable("workspace_member", {
 //Relation
 export const workspaceRelations = relations(workspace, ({ one, many }) => ({
   owner: one(user, {
-    fields: [workspace.ownerId],
+    fields: [workspace.createdBy],
     references: [user.id],
   }),
 

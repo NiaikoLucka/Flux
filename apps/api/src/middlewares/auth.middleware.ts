@@ -1,12 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import { auth } from "../auth/auth.js";
+import { User } from "../types/auth.types.js";
 
 export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    name: string;
-  };
+  user?: User;
 }
 
 export async function requireAuth(
@@ -25,7 +22,10 @@ export async function requireAuth(
       });
     }
 
-    req.user = session.user;
+    req.user = {
+      ...session.user,
+      image: session.user.image ?? null,
+    };
 
     next();
   } catch (error) {
