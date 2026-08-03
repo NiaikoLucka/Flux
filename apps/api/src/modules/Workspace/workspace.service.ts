@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { workspace, workspaceMember } from "../../db/schema/index.js";
 import { User } from "../../types/auth.types.js";
@@ -24,4 +25,21 @@ export async function createWorkspaceService(
     });
     return newWorkspace;
   });
+}
+//Get User Workspace
+export async function getUserWorkspace(UserId: string) {
+  const rows = db
+    .select({
+      id: workspace.id,
+      name: workspace.name,
+      currency: workspace.currency,
+      createdBy: workspace.createdBy,
+      createdAt: workspace.createdAt,
+      role: workspaceMember.role,
+    })
+    .from(workspaceMember)
+    .innerJoin(workspace, eq(workspaceMember.workspaceId, workspace.id))
+    .where(eq(workspaceMember.userId, UserId));
+
+  return rows;
 }

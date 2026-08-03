@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { createWorkspaceService } from "./workspace.service.js";
+import { createWorkspaceService, getUserWorkspace } from "./workspace.service.js";
 
 export async function creatWorkspaceController(req: Request, res: Response) {
   try {
@@ -14,5 +14,17 @@ export async function creatWorkspaceController(req: Request, res: Response) {
     res.status(500).json({
       message: "Cannot create workspace",
     });
+  }
+}
+
+export async function getUserWorkspaceController(req:Request, res: Response) {
+  try{
+    const UserId = req.user!.id;
+    const workspaces = await getUserWorkspace(UserId)
+
+    res.status(200).json(workspaces)
+  }catch (error){
+    console.error("Error fetching user workspaces:", error);
+    res.status(500).json({ message: "Erreur lors de la récupération des workspaces"})
   }
 }
