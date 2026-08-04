@@ -1,9 +1,16 @@
 import { AppError } from "../../errors/AppError.js";
 import type { Request, Response } from "express";
-import { addMemberToWorkspace } from "./member.service.js";
+import {
+  addMemberToWorkspace,
+  ListMembersServices,
+  removeMembersServices,
+  updateMemberRoleService,
+} from "./member.service.js";
+import { Role } from "../../constants/permissions.js";
 
 type Params = {
   workspaceId: string;
+  memberId: string;
 };
 
 export async function addMember(req: Request<Params>, res: Response) {
@@ -37,6 +44,103 @@ export async function addMember(req: Request<Params>, res: Response) {
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.status).json({ message: error.message });
+    }
+  }
+}
+
+export async function ListMembersControllers(
+  req: Request<Params>,
+  res: Response,
+) {
+  try {
+    const { workspaceId } = req.params;
+
+    if (!workspaceId) {
+      return res.status(400).json({
+        message: "workspaceId est requis",
+      });
+    }
+
+    const members = await ListMembersServices(workspaceId);
+    return res.status(200).json(members);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.status).json({
+        message: error.message,
+      });
+    }
+  }
+}
+
+export async function updateRoleControllers(req: Request<Params>, res: Response) {
+  try {
+    const { workspaceId, memberId } = req.params;
+    const { role }: { role: Role } = req.body;
+
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Utilisateur non authentifié",
+      });
+    }
+
+    if (!role) {
+      return res.status(400).json({
+        message: "role est requis",
+      });
+    }
+    if (!req.workspaceMembership) {
+      return res.status(403).json({
+        message: "Permission workspace manquante",
+      });
+    }
+    const actorId = req.user.id;
+    const actorRole = req.workspaceMembership.role; // peuplé par requirePermission
+
+    if (!role) {
+      return res.status(400).json({ message: "role est requis" });
+    }
+
+    const updated = await updateMemberRoleService(
+      workspaceId,
+      actorId,
+      memberId,
+      role,
+      actorRole,
+    );
+    return res.status(200).json(updated);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.status).json({
+        message: error.message,
+      });
+    }
+  }
+}
+
+export async function removeControllers(req: Request<Params>, res: Response) {
+  try {
+    const { workspaceId } = req.params;
+    const { memberIds } = req.body; // tableau, pour supporter suppression multiple
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Utilisateur non authentifié",
+      });
+    }
+    const actorId = req.user.id;
+
+    if (!Array.isArray(memberIds) || memberIds.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "memberIds doit être un tableau non vide" });
+    }
+
+    const result = await removeMembersServices(workspaceId, actorId, memberIds);
+    return res.status(200).json(result);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.status).json({
+        message: error.message,
+      });
     }
   }
 }
