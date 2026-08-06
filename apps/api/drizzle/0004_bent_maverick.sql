@@ -1,0 +1,1 @@
+ALTER TABLE "financial_account" ADD COLUMN "initial_balance" numeric(12, 2) DEFAULT '0';

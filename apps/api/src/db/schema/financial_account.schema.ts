@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  numeric,
   pgEnum,
   pgTable,
   text,
@@ -28,6 +29,8 @@ export const financial_account = pgTable("financial_account", {
   name: text("name").notNull(),
 
   type: financial_accountTypeEnum("type").notNull(),
+
+  initialBalance: numeric("initial_balance", {precision:12, scale: 2}). default("0"),
 
   createdBy: text("created_by")
     .notNull()
