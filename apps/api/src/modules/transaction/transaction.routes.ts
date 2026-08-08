@@ -1,18 +1,37 @@
 import { Router } from "express";
-import {
-  creatTransaction,
-  getTransactionByID,
-  listTransaction,
-  updateTransaction,
-  deleteTransaction,
-} from "./transaction.controller.js";
+import * as TransactionController from "./transaction.controller.js";
+import { requireAuth } from "../../middlewares/auth.middleware.js";
+import { requirePermission } from "../../middlewares/permissions.middleware.js";
+import { PERMISSIONS } from "../../constants/permissions.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
-router.get("/", listTransaction);
-router.get("/:id", getTransactionByID);
-router.post("/", creatTransaction);
-router.put("/:id", updateTransaction);
-router.delete("/:id", deleteTransaction);
+(router.get("/", requireAuth, TransactionController.ListTransactionController),
+  router.get(
+    "/:transactionId",
+    requireAuth,
+    TransactionController.GetTransactionControllerById,
+  ));
+
+router.post(
+  "/",
+  requireAuth,
+  requirePermission(PERMISSIONS.TRANSACTION_CREATE),
+  TransactionController.CreatTransactionController,
+);
+
+router.patch(
+  "/:transactionId",
+  requireAuth,
+  requirePermission(PERMISSIONS.TRANSACTION_UPDATE),
+  TransactionController.UpdateTransactionController,
+);
+
+router.delete(
+  "/:transactionId",
+  requireAuth,
+  requirePermission(PERMISSIONS.TRANSACTION_DELETE),
+  TransactionController.DeleteTransactionController,
+);
 
 export default router;

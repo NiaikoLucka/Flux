@@ -11,6 +11,7 @@ export const PERMISSIONS = {
   ACCOUNT_DELETE: "account:delete",
   TRANSACTION_CREATE: "transaction:create",
   TRANSACTION_UPDATE: "transaction:update",
+  TRANSACTION_DELETE: "transaction:delete"
   // ex: TRANSACTION_DELETE, ACCOUNT_CREATE... à ajouter au besoin
 } as const;
 
@@ -42,10 +43,12 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.ACCOUNT_DELETE,
     PERMISSIONS.TRANSACTION_CREATE,
     PERMISSIONS.TRANSACTION_UPDATE,
+    PERMISSIONS.TRANSACTION_DELETE
   ],
   EDITOR: [
     PERMISSIONS.TRANSACTION_CREATE,
     PERMISSIONS.TRANSACTION_UPDATE,
+    PERMISSIONS.TRANSACTION_DELETE
   ],
   VIEWER: [], // lecture seule = pas de permission d'écriture
 };
