@@ -30,8 +30,12 @@ export const transaction = pgTable("transaction", {
   accountId: uuid("account_id")
     .notNull()
     .references(() => financial_account.id, {
-      onDelete: "cascade",
+      onDelete: "restrict",
     }),
+
+  toAccountId: uuid("to_account_id").references(() => financial_account.id, {
+    onDelete: "restrict",
+  }),
 
   createdBy: text("created_by")
     .notNull()
@@ -65,8 +69,15 @@ export const transactionRelations = relations(transaction, ({ one }) => ({
   account: one(financial_account, {
     fields: [transaction.accountId],
     references: [financial_account.id],
+    relationName: "sourceAccount"
   }),
 
+  toAccount: one(financial_account, {
+    fields: [transaction.toAccountId],
+    references:[financial_account.id],
+    relationName: "destinationAccount"
+  }),
+  
   creator: one(user, {
     fields: [transaction.createdBy],
     references: [user.id],

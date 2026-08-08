@@ -10,6 +10,7 @@ import {
 
 import { workspace } from "./workspace.schema.js";
 import { user } from "./auth.schema.js";
+import { transaction } from "./transaction.schema.js";
 
 export const financial_accountTypeEnum = pgEnum("account_type", [
   "BANK",
@@ -30,15 +31,16 @@ export const financial_account = pgTable("financial_account", {
 
   type: financial_accountTypeEnum("type").notNull(),
 
-  initialBalance: numeric("initial_balance", {precision:12, scale: 2}). default("0"),
+  initialBalance: numeric("initial_balance", {
+    precision: 12,
+    scale: 2,
+  }).default("0"),
 
   createdBy: text("created_by")
     .notNull()
     .references(() => user.id),
 
-  createdAt: timestamp("created_at")
-    .defaultNow()
-    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -46,14 +48,22 @@ export const financial_account = pgTable("financial_account", {
     .notNull(),
 });
 
-export const financial_accountRelation = relations(financial_account, ({ one }) => ({
-  workspace: one(workspace, {
-    fields: [financial_account.workspaceId],
-    references: [workspace.id],
-  }),
+export const financial_accountRelation = relations(
+  financial_account,
+  ({ one, many }) => ({
+    workspace: one(workspace, {
+      fields: [financial_account.workspaceId],
+      references: [workspace.id],
+    }),
 
-  creator: one(user, {
-    fields: [financial_account.createdBy],
-    references: [user.id],
+    creator: one(user, {
+      fields: [financial_account.createdBy],
+      references: [user.id],
+    }),
+    transactions: many(transaction, { relationName: "sourceAccount" }),
+
+    incomingTransfers: many(transaction, {
+      relationName: "destinationAccount",
+    }),
   }),
-}));
+);
