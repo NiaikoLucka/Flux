@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
-import { creatWorkspaceController, getUserWorkspaceController } from "./workspace.controller.js";
+import * as WorkspaceController from "./workspace.controller.js";
 
 const router = Router();
 
-router.get("/", requireAuth, getUserWorkspaceController)
-router.post("/", requireAuth , creatWorkspaceController)
-
+router.get("/", requireAuth, WorkspaceController.getUserWorkspaceController);
+router.post("/", requireAuth, WorkspaceController.creatWorkspaceController);
 
 export default router;

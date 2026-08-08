@@ -5,9 +5,6 @@ import { auth } from "../../auth/auth.js";
 
 const router = Router();
 
-router.all(
-  "/{*any}",
-  toNodeHandler(auth)
-);
+router.all("/{*any}", toNodeHandler(auth));
 
 export default router;
