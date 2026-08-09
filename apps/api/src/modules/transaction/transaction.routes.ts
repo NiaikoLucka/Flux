@@ -6,12 +6,12 @@ import { PERMISSIONS } from "../../constants/permissions.js";
 
 const router = Router({ mergeParams: true });
 
-(router.get("/", requireAuth, TransactionController.ListTransactionController),
-  router.get(
-    "/:transactionId",
-    requireAuth,
-    TransactionController.GetTransactionControllerById,
-  ));
+router.get("/", requireAuth, TransactionController.ListTransactionController);
+router.get(
+  "/:transactionId",
+  requireAuth,
+  TransactionController.GetTransactionControllerById,
+);
 
 router.post(
   "/",
