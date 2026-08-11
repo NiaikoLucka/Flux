@@ -35,16 +35,7 @@ export const CreatFinancialAccountController = async (
     });
     return res.status(201).json(financialAccount);
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.status).json({ message: error.message });
-    }
-
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
+    handleError(error,res)
   }
 };
 
@@ -57,17 +48,7 @@ export const ListFinacialAccountController = async (
     const accounts = await listFinancialAccount(workspaceId);
     return res.status(200).json(accounts);
   } catch (error) {
-    // TODO: change all error with handle error
-    if (error instanceof AppError) {
-      return res.status(error.status).json({ message: error.message });
-    }
-
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
+    handleError(error,res)
   }
 };
 

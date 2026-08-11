@@ -7,6 +7,7 @@ import {
   updateMemberRoleService,
 } from "./member.service.js";
 import { Role } from "../../constants/permissions.js";
+import { handleError } from "../../errors/handleError.js";
 
 type Params = {
   workspaceId: string;
@@ -42,9 +43,7 @@ export async function addMember(req: Request<Params>, res: Response) {
 
     return res.status(201).json({ message: "Membre ajouté", member });
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.status).json({ message: error.message });
-    }
+    handleError(error, res);
   }
 }
 
@@ -64,15 +63,14 @@ export async function ListMembersControllers(
     const members = await ListMembersServices(workspaceId);
     return res.status(200).json(members);
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.status).json({
-        message: error.message,
-      });
-    }
+    handleError(error, res);
   }
 }
 
-export async function updateRoleControllers(req: Request<Params>, res: Response) {
+export async function updateRoleControllers(
+  req: Request<Params>,
+  res: Response,
+) {
   try {
     const { workspaceId, memberId } = req.params;
     const { role }: { role: Role } = req.body;
@@ -109,11 +107,7 @@ export async function updateRoleControllers(req: Request<Params>, res: Response)
     );
     return res.status(200).json(updated);
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.status).json({
-        message: error.message,
-      });
-    }
+    handleError(error, res);
   }
 }
 
@@ -137,10 +131,6 @@ export async function removeControllers(req: Request<Params>, res: Response) {
     const result = await removeMembersServices(workspaceId, actorId, memberIds);
     return res.status(200).json(result);
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.status).json({
-        message: error.message,
-      });
-    }
+    handleError(error,res)
   }
 }
