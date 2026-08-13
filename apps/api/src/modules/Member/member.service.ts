@@ -3,7 +3,6 @@ import { db } from "../../db/index.js";
 import { workspaceMember } from "../../db/schema/workspace.schema.js";
 import { AppError } from "../../errors/AppError.js";
 import { user } from "../../db/schema/auth.schema.js";
-import { email } from "better-auth";
 
 const ALLOWED_INVITER_ROLE = ["OWNER", "ADMIN"];
 
