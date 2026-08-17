@@ -67,7 +67,7 @@ const Sidebar = () => {
         <div className="border-t border-border p-4">
           <NavLink
             to="/settings"
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent">
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-200">
             <Settings className="size-4" />
             Settings
           </NavLink>

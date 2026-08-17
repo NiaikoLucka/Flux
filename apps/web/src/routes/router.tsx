@@ -11,6 +11,7 @@ import WorkspacePage from "../pages/workspace/workspace";
 
 import DashboardLayout from "../layout/dashboard-layout";
 import AuthLayout from '../layout/auth-layout';
+import SettingsPage from "../pages/settings/settings";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: "/workspace",
         element: <WorkspacePage />,
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />,
       },
     ],
   },
