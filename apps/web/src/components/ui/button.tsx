@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
+import clsx from "clsx";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "default" | "secondary" | "outline" | "ghost" | "destructive";
@@ -8,9 +9,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 const variantClasses = {
   default: "bg-primary text-primary-foreground hover:opacity-90",
 
-  secondary: "bg-secondary text-secondary-foreground hover:bg-accent",
+  secondary: "bg-secondary text-secondary-foreground hover:bg-accent border border-border",
 
-  outline: "border bg-background hover:bg-accent",
+  outline: "border border-border bg-background hover:bg-accent ",
 
   ghost: "hover:bg-accent",
 
@@ -31,14 +32,14 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={[
-        "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        "disabled:pointer-events-none disabled:opacity-50",
-        variantClasses[variant],
-        sizeClasses[size],
-        className,
-      ].join(" ")}
+      className={clsx(
+        [
+          "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer ",
+          variantClasses[variant],
+          sizeClasses[size],
+          className,
+        ].join(" "),
+      )}
       {...props}
     />
   );
