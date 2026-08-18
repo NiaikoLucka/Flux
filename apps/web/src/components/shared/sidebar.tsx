@@ -1,10 +1,10 @@
 import {
   ArrowLeftRight,
   LayoutDashboard,
+  PanelLeft,
   Settings,
   Users,
   Wallet,
-  X,
 } from "lucide-react";
 
 import { NavLink } from "react-router";
@@ -40,75 +40,106 @@ const navigation = [
 
 const Sidebar = ({ onSettingsClick }: SidebarProps) => {
   const sidebarOpen = useAppStore((state) => state.sidebarOpen);
-  const setSidebarOpen = useAppStore((state) => state.setSidebarOpen);
+  const toggleSidebar = useAppStore((state) => state.toggleSidebar);
+
   return (
-    <>
-      {sidebarOpen && (
-        <button
-          type="button"
-          aria-label="Close sidebar"
-          onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-        />
+    <aside
+      className={clsx(
+        "fixed inset-y-0 left-0 z-40 border-r border-border bg-background transition-[width] duration-200 ",
+        sidebarOpen ? "w-64" : "w-16",
       )}
-      {/* TODO: ajouter un side bar au mobil */}
-      <aside
-        className={clsx(
-          [
-            "fixed inset-y-0 left-0 z-40 hidden w-64 border-border border-r bg-sidebar transition-transform duration-200 md:block md:translate-x-0",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full",
-          ].join(" "),
-        )}>
-        <div className="flex h-full flex-col">
-          {/* Logo */}
-          <div className="flex h-16 items-center  px-6">
-            <span className="text-lg font-semibold">Flux</span>
+    >
+      <div className="flex h-full flex-col">
 
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(false)}
-              className="rounded-md p-2 hover:bg-sidebar-accent md:hidden"
-              aria-label="Close sidebar">
-              <X className="size-5" />
-            </button>
-          </div>
+        {/* Header */}
+        <div
+          className={clsx(
+            "flex h-16 items-center border-b border-border",
+            sidebarOpen
+              ? "justify-between px-4"
+              : "justify-center",
+          )}
+        >
+          {sidebarOpen && (
+            <span className="text-lg font-semibold">
+              Flux
+            </span>
+          )}
 
-          {/* Navigation */}
-          <nav className="flex-1 space-y-1 p-4">
-            {navigation.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <NavLink
-                  key={item.href}
-                  to={item.href}
-                  className={({ isActive }) =>
-                    [
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
-                      isActive
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                    ].join(" ")
-                  }>
-                  <Icon className="size-4" />
-                  {item.label}
-                </NavLink>
-              );
-            })}
-          </nav>
-
-          {/* Settings */}
-          <div className="border-t border-border p-4">
-            <div
-              onClick={onSettingsClick}
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-200 cursor-pointer">
-              <Settings className="size-4" />
-              Paramètres
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            className="rounded-md p-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer"
+            aria-label={
+              sidebarOpen
+                ? "Réduire le menu"
+                : "Développer le menu"
+            }
+          >
+            <PanelLeft
+              className={clsx(
+                "size-4 transition-transform duration-200",
+                !sidebarOpen && "rotate-180",
+              )}
+            />
+          </button>
         </div>
-      </aside>
-    </>
+
+        {/* Navigation */}
+        <nav className="flex-1 space-y-1 p-4">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <NavLink
+                key={item.href}
+                to={item.href}
+                title={!sidebarOpen ? item.label : undefined}
+                className={({ isActive }) =>
+                  clsx(
+                    "flex items-center rounded-md py-2 text-sm font-medium transition-colors duration-200",
+                    sidebarOpen
+                      ? "gap-3 px-3"
+                      : "justify-center px-2",
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  )
+                }
+              >
+                <Icon className="size-4 shrink-0" />
+
+                {sidebarOpen && (
+                  <span>{item.label}</span>
+                )}
+              </NavLink>
+            );
+          })}
+        </nav>
+
+        {/* Settings */}
+        <div className="border-t border-border p-4">
+          <button
+            type="button"
+            onClick={onSettingsClick}
+            title={!sidebarOpen ? "Paramètres" : undefined}
+            className={clsx(
+              "flex w-full items-center rounded-md py-2 text-sm font-medium transition-colors duration-200 cursor-pointer",
+              sidebarOpen
+                ? "gap-3 px-3"
+                : "justify-center px-2",
+              "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            )}
+          >
+            <Settings className="size-4 shrink-0" />
+
+            {sidebarOpen && (
+              <span>Paramètres</span>
+            )}
+          </button>
+        </div>
+      </div>
+    </aside>
   );
 };
 

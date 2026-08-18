@@ -4,10 +4,15 @@ import Sidebar from "../components/shared/sidebar";
 import Header from "../components/shared/header";
 import { useState } from "react";
 import SettingsPage from "../pages/settings/settings";
+import { useAppStore } from "../stores/app.store";
+import clsx from "clsx";
 
 const DashboardLayout = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
+  const sidebarOpen = useAppStore(
+    (state) => state.sidebarOpen,
+  );
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Sidebar onSettingsClick={() => setSettingsOpen(true)} />
@@ -16,7 +21,10 @@ const DashboardLayout = () => {
         onClose={() => setSettingsOpen(false)}
       />
 
-      <div className="min-h-screen md:pl-64">
+      <div className={clsx(
+          "min-h-screen transition-all duration-200",
+          sidebarOpen ? "ml-64" : "ml-16",
+        )}>
         <Header />
 
         <main className="p-6 md:p-6">

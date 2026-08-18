@@ -1,26 +1,20 @@
-import { Bell, Menu } from "lucide-react";
-import { useAppStore } from "../../stores/app.store";
+import { Bell } from "lucide-react";
 
 const Header = () => {
-  const toggleSidebar = useAppStore((state) => state.toggleSidebar);
-
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-border border-b bg-background/95 px-6 backdrop-blur">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/95 px-6 backdrop-blur">
       <div>
-        <button
-          type="button"
-          onClick={toggleSidebar}
-          className="rounded-md p-2 hover:bg-accent md:hidden"
-          aria-label="Open sidebar">
-          <Menu className="size-5" />
-        </button>
-        <h2 className="text-sm font-medium text-muted-foreground">Flux</h2>
+        <h2 className="text-sm font-medium text-muted-foreground">
+          Flux
+        </h2>
       </div>
 
       <div className="flex items-center gap-3">
         <button
           type="button"
-          className="rounded-md p-2 hover:bg-accent cursor-pointer transition-colors duration-300">
+          className="cursor-pointer rounded-md p-2 transition-colors duration-300 hover:bg-accent"
+          aria-label="Notifications"
+        >
           <Bell className="size-5" />
         </button>
 
