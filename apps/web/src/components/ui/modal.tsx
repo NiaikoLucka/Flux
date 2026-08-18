@@ -22,7 +22,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
       {/* Overlay */}
       <div
         className="absolute inset-0  backdrop-blur-[1px] opacity-85 bg-accent/50"
-        onClick={onClose}
+        // onClick={onClose}
         aria-hidden="true"
       />
 
