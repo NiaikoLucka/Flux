@@ -50,7 +50,7 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const result = registerSchema.safeParse(form);
@@ -73,7 +73,7 @@ const RegisterPage = () => {
 
     try {
       console.log("Formulaire valide :", result.data);
-      authClient.signUp.email({
+      await authClient.signUp.email({
         name: result.data.name,
         email: result.data.email,
         password: result.data.password,

@@ -19,4 +19,10 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+export const loginSchema = z.object({
+  email: z.string().email("L'adresse email n'est pas valide."),
+  password: z.string().min(1, "Le mot de passe est obligatoire."),
+});
+
+export type LoginForm = z.infer<typeof loginSchema>;
 export type RegisterForm = z.infer<typeof registerSchema>;
