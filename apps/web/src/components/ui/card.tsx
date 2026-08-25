@@ -8,7 +8,7 @@ const Card = ({ className = "", ...props }: CardProps) => {
     <div
       className={clsx(
         [
-          "rounded-lg border bg-card text-card-foreground shadow-sm",
+          "rounded-lg border border-border bg-card text-card-foreground shadow-sm",
           className,
         ].join(" "),
       )}
