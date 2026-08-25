@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Eye, EyeOff } from "lucide-react";
 import {
   forwardRef,
@@ -31,9 +32,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             type={isPassword && showPassword ? "text" : type}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? `${props.name}-error` : undefined}
-            className={`block min-w-0 grow bg-transparent py-1.5 pl-2 pr-3 text-foreground placeholder:text-muted-foreground focus:outline-none sm:text-sm/6 ${className}`}
+            // aria-invalid={Boolean(error)}
+            // aria-describedby={error ? `${props.name}-error` : undefined}
+            className={clsx("block min-w-0 grow bg-transparent py-1.5 pl-2 pr-3 text-foreground placeholder:text-muted-foreground focus:outline-none sm:text-sm/6 ", className)}
             {...props}
           />
 
@@ -41,19 +42,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="mr-2 text-muted-foreground transition-colors hover:text-foreground"
+              className="mr-2 text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
               aria-label={
                 showPassword
                   ? "Masquer le mot de passe"
                   : "Afficher le mot de passe"
               }>
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           )}
         </div>
 
         {error && (
-          <p id={`${props.name}-error`} className="mt-1 text-sm text-error">
+          <p  className="mt-1 text-sm text-destructive">
             {error}
           </p>
         )}

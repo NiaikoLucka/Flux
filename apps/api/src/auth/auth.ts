@@ -10,7 +10,5 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: [
-    "http://localhost:5173", // TODO: Mettre a jour avec le lien du front 
-  ],
+  trustedOrigins: ["http://localhost:5173"],
 });
