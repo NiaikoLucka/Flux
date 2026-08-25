@@ -1,6 +1,6 @@
 const LoginPage = () => {
   return (
-    <div>
+    <div className="flex w-full h-screen items-center justify-center ">
       <h1>Login</h1>
     </div>
   );
