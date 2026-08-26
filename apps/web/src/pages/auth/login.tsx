@@ -1,4 +1,9 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
 import Card from "../../components/ui/card";
 import { loginSchema, type LoginForm } from "../../schema/auth.schema";
 import { CircleX, Lock, Mail } from "lucide-react";
@@ -7,6 +12,7 @@ import z from "zod";
 import Button from "../../components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { authClient } from "../../lib/auth-client";
+import { useSession } from "../../hooks/use-session";
 
 type FormError = Partial<Record<keyof LoginForm, string>>;
 
@@ -17,10 +23,21 @@ const initialForm: LoginForm = {
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { data: session , isPending} = useSession();
   const [form, setForm] = useState<LoginForm>(initialForm);
   const [formError, setFormError] = useState<FormError>({});
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [session, navigate]);
+
+  if (isPending) {
+    return <div>Chargement...</div>;
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

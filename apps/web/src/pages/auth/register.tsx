@@ -12,6 +12,7 @@ import z from "zod";
 import Button from "../../components/ui/button";
 import { authClient } from "../../lib/auth-client";
 import { Link, useNavigate } from "react-router";
+import { useSession } from "../../hooks/use-session";
 
 type FormError = Partial<Record<keyof RegisterForm, string>>;
 
@@ -24,7 +25,7 @@ const initialForm: RegisterForm = {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { data: session } = authClient.useSession();
+  const { data: session ,isPending } = useSession();
   const [form, setForm] = useState<RegisterForm>(initialForm);
   const [formError, setFormError] = useState<FormError>({});
   const [Error, setError] = useState("");
@@ -32,9 +33,13 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (session) {
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
   }, [session, navigate]);
+
+  if (isPending) {
+    return <div>Chargement...</div>;
+  }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
