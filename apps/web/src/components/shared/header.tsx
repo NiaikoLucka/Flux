@@ -1,4 +1,5 @@
 import { Bell } from "lucide-react";
+import UserMenu from "./headerComponents/userMenu";
 
 const Header = () => {
   return (
@@ -18,9 +19,7 @@ const Header = () => {
           <Bell className="size-5" />
         </button>
 
-        <div className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
-          U
-        </div>
+      <UserMenu />
       </div>
     </header>
   );

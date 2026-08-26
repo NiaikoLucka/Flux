@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useSession } from "../hooks/use-session";
 
 const ProtectedRoute = () => {
   const { data: session, isPending } = useSession();
+  const location = useLocation();
 
   if (isPending) {
     return (
