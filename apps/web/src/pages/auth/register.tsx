@@ -10,9 +10,9 @@ import Card from "../../components/ui/card";
 import { registerSchema, type RegisterForm } from "../../schema/auth.schema";
 import z from "zod";
 import Button from "../../components/ui/button";
-import { authClient } from "../../lib/auth-client";
 import { Link, useNavigate } from "react-router";
 import { useSession } from "../../hooks/use-session";
+import { authService } from "../../services/auth.service";
 
 type FormError = Partial<Record<keyof RegisterForm, string>>;
 
@@ -25,7 +25,7 @@ const initialForm: RegisterForm = {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { data: session ,isPending } = useSession();
+  const { data: session, isPending } = useSession();
   const [form, setForm] = useState<RegisterForm>(initialForm);
   const [formError, setFormError] = useState<FormError>({});
   const [Error, setError] = useState("");
@@ -78,7 +78,7 @@ const RegisterPage = () => {
 
     try {
       console.log("Formulaire valide :", result.data);
-      await authClient.signUp.email({
+      await authService.signUp({
         name: result.data.name,
         email: result.data.email,
         password: result.data.password,

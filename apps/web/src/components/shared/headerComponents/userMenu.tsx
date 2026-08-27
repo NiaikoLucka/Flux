@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { LogOut } from "lucide-react";
 
-import { authClient } from "../../../lib/auth-client";
 import { useSession } from "../../../hooks/use-session";
 import { useNavigate } from "react-router";
+import { authService } from "../../../services/auth.service";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const UserMenu = () => {
     try {
       console.log("Logout...");
 
-      const result = await authClient.signOut();
+      const result = await authService.signOut();
 
       console.log("Résultat:", result);
 

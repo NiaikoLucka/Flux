@@ -11,8 +11,8 @@ import Input from "../../components/ui/input";
 import z from "zod";
 import Button from "../../components/ui/button";
 import { Link, useNavigate } from "react-router";
-import { authClient } from "../../lib/auth-client";
 import { useSession } from "../../hooks/use-session";
+import { authService } from "../../services/auth.service";
 
 type FormError = Partial<Record<keyof LoginForm, string>>;
 
@@ -23,7 +23,7 @@ const initialForm: LoginForm = {
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { data: session , isPending} = useSession();
+  const { data: session, isPending } = useSession();
   const [form, setForm] = useState<LoginForm>(initialForm);
   const [formError, setFormError] = useState<FormError>({});
   const [serverError, setServerError] = useState("");
@@ -74,7 +74,7 @@ const LoginPage = () => {
     setFormError({});
     setIsLoading(true);
     try {
-      await authClient.signIn.email({
+      await authService.signIn({
         email: result.data.email,
         password: result.data.password,
       });

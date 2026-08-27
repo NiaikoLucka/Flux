@@ -53,7 +53,7 @@
   --secondary-foreground: oklch(0.21 0.006 285.883);
   --accent: oklch(94.416% 0.00011 271.152);
   --accent-foreground: oklch(0.21 0.006 285.883);
-  --destructive: oklch(0.637 0.208 25.326);
+  --destructive: oklab(63.681% 0.18788 0.08887);
   --destructive-foreground: oklch(0.985 0 180);
   --ring: oklch(0.21 0.006 285.883);
   --sidebar: oklch(1 0 180);
