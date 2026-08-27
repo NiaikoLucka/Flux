@@ -4,6 +4,8 @@ import { LogOut } from "lucide-react";
 import { useSession } from "../../../hooks/use-session";
 import { useNavigate } from "react-router";
 import { authService } from "../../../services/auth.service";
+import { queryClient } from "../../../lib/query-client";
+import { workspaceKeys } from "../../../queries/workspace.queries";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const UserMenu = () => {
 
       const result = await authService.signOut();
 
+      queryClient.removeQueries({ queryKey: workspaceKeys.all });
       console.log("Résultat:", result);
 
       if (result.error) {

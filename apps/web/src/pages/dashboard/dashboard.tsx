@@ -1,8 +1,12 @@
+import WorkspaceTest from "../workspace/workspace.test";
 
 const dashboard = () => {
   return (
-    <div>dashboard</div>
-  )
-}
+    <>
+      <div>dashboard</div>
+      <WorkspaceTest />
+    </>
+  );
+};
 
-export default dashboard
+export default dashboard;
