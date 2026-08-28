@@ -29,7 +29,6 @@ const WorkspaceForm = () => {
     try {
       const workspace = await mutateAsync(data);
 
-      console.log("CREATED WORKSPACE:", workspace);
       setWorkspaceId(workspace.id);
 
       navigate("/dashboard", {
