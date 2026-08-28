@@ -10,7 +10,7 @@ export const getWorkspaces = async (): Promise<Workspace[]> => {
 
 export const createWorkspace = async (
   data: CreateWorkspaceInput,
-): Promise<CreateWorkspaceInput> => {
+): Promise<Workspace> => {
   const response = await api.post("/workspaces", data);
 
   return response.data;

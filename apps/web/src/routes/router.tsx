@@ -11,6 +11,9 @@ import WorkspacePage from "../pages/workspace/workspace";
 import DashboardLayout from "../layout/dashboard-layout";
 import AuthLayout from "../layout/auth-layout";
 import ProtectedRoute from "./protected-route";
+import WorkspaceGate from "./workspace-gate";
+import NoWorkspacePage from "../components/workspaces/no-workspace";
+import CreateWorkspacePage from "../pages/workspace/creat-workspace";
 
 export const router = createBrowserRouter([
   {
@@ -31,23 +34,37 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        element: <DashboardLayout />,
+        path: "/workspace/empty",
+        element: <NoWorkspacePage />,
+      },
+      {
+        path:"/workspace/create",
+        element: <CreateWorkspacePage />
+      },
+
+      {
+        element: <WorkspaceGate />,
         children: [
           {
-            path: "/dashboard",
-            element: <DashboardPage />,
-          },
-          {
-            path: "/accounts",
-            element: <AccountsPage />,
-          },
-          {
-            path: "/transactions",
-            element: <TransactionsPage />,
-          },
-          {
-            path: "/workspace",
-            element: <WorkspacePage />,
+            element: <DashboardLayout />,
+            children: [
+              {
+                path: "/dashboard",
+                element: <DashboardPage />,
+              },
+              {
+                path: "/accounts",
+                element: <AccountsPage />,
+              },
+              {
+                path: "/transactions",
+                element: <TransactionsPage />,
+              },
+              {
+                path: "/workspace",
+                element: <WorkspacePage />,
+              },
+            ],
           },
         ],
       },

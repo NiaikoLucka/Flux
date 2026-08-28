@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { createWorkspace, getWorkspaces } from "../services/workspace.service";
 import { useSession } from "../hooks/use-session";
+import type { Workspace } from "../types/workspace.types";
 
 export const workspaceKeys = {
   all: ["workspaces"] as const,
@@ -26,10 +27,11 @@ export const useCreateWorkspace = () => {
   return useMutation({
     mutationFn: createWorkspace,
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: workspaceKeys.all,
-      });
+    onSuccess: (newWorkspace) => {
+      queryClient.setQueriesData(
+        { queryKey: workspaceKeys.all },
+        (old: Workspace[] | undefined) => (old ? [...old, newWorkspace] : old),
+      );
     },
   });
 };

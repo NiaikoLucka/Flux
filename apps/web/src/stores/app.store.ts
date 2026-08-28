@@ -6,6 +6,10 @@ type Theme = "light" | "dark" | "system";
 type AppStore = {
   sidebarOpen: boolean;
   theme: Theme;
+  workspaceId: string | null;
+
+  setWorkspaceId: (workspaceId: string) => void;
+  clearWorkspaceId: () => void;
 
   setSidebarOpen: (open: boolean) => void;
   toggleSidebar: () => void;
@@ -17,6 +21,15 @@ export const useAppStore = create<AppStore>()(
     (set) => ({
       sidebarOpen: false,
       theme: "system",
+      workspaceId: null,
+
+      setWorkspaceId: (workspaceId) => {
+        set({ workspaceId });
+      },
+
+      clearWorkspaceId: () => {
+        set({ workspaceId: null });
+      },
 
       setSidebarOpen: (open) => {
         set({ sidebarOpen: open });
