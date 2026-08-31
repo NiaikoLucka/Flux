@@ -6,9 +6,10 @@ type Theme = "light" | "dark" | "system";
 type AppStore = {
   sidebarOpen: boolean;
   theme: Theme;
+  selectedWorkspaceByUser: Record<string, string | null>;
   workspaceId: string | null;
 
-  setWorkspaceId: (workspaceId: string) => void;
+  setWorkspaceId: (userId: string, workspaceId: string) => void;
   clearWorkspaceId: () => void;
 
   setSidebarOpen: (open: boolean) => void;
@@ -21,10 +22,16 @@ export const useAppStore = create<AppStore>()(
     (set) => ({
       sidebarOpen: false,
       theme: "system",
+      selectedWorkspaceByUser: {},
       workspaceId: null,
 
-      setWorkspaceId: (workspaceId) => {
-        set({ workspaceId });
+      setWorkspaceId: (userId, workspaceId) => {
+        set((state) => ({
+          selectedWorkspaceByUser: {
+            ...state.selectedWorkspaceByUser,
+            [userId]: workspaceId,
+          },
+        }));
       },
 
       clearWorkspaceId: () => {
