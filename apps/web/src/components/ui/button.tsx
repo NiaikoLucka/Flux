@@ -13,7 +13,7 @@ const variantClasses = {
 
   outline: "border border-border bg-background hover:bg-accent ",
 
-  ghost: "hover:bg-accent",
+  ghost: "hover:bg-accent hover:text-accent-foreground",
 
   destructive: "bg-destructive text-destructive-foreground hover:opacity-90",
 };

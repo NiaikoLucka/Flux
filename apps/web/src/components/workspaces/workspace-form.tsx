@@ -9,9 +9,13 @@ import {
 
 import { useAppStore } from "../../stores/app.store";
 import { useCreateWorkspace } from "../../queries/workspace.queries";
+import { useSession } from "../../hooks/use-session";
+import Input from "../ui/input";
+import Button from "../ui/button";
 
 const WorkspaceForm = () => {
   const navigate = useNavigate();
+  const { data: session } = useSession();
 
   const setWorkspaceId = useAppStore((state) => state.setWorkspaceId);
 
@@ -28,8 +32,11 @@ const WorkspaceForm = () => {
   const onSubmit = async (data: CreateWorkspaceForm) => {
     try {
       const workspace = await mutateAsync(data);
+      const userId = session?.user.id;
 
-      setWorkspaceId(workspace.id);
+      if (!userId) return;
+
+      setWorkspaceId(userId, workspace.id);
 
       navigate("/dashboard", {
         replace: true,
@@ -42,16 +49,18 @@ const WorkspaceForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="space-y-2">
-        <label htmlFor="name" className="text-sm font-medium">
+        <label
+          htmlFor="name"
+          className="text-sm block font-medium mb-2 text-muted-foreground">
           Nom du workspace
         </label>
 
-        <input
+        <Input
           id="name"
           type="text"
           placeholder="Ex: Sampana Centrale"
           {...register("name")}
-          className="w-full rounded-md border bg-background px-3 py-2 outline-none focus:ring-2"
+          className="w-full rounded-md  bg-background px-3 py-2 outline-none  "
         />
 
         {errors.name && (
@@ -65,12 +74,9 @@ const WorkspaceForm = () => {
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50">
+      <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Création..." : "Créer le workspace"}
-      </button>
+      </Button>
     </form>
   );
 };
