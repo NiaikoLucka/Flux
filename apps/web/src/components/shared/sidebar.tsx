@@ -83,7 +83,13 @@ const Sidebar = ({ onSettingsClick }: SidebarProps) => {
 
         {/* Navigation */}
         <div className="flex-1 px-4 py-2">
-          <p className="text-muted-foreground text-base ">Menu</p>
+          <p
+            className={clsx(
+              "text-muted-foreground text-base",
+              sidebarOpen ? "" : "hidden",
+            )}>
+            Menu
+          </p>
           <nav>
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -95,7 +101,7 @@ const Sidebar = ({ onSettingsClick }: SidebarProps) => {
                   title={!sidebarOpen ? item.label : undefined}
                   className={({ isActive }) =>
                     clsx(
-                      "flex items-center rounded-md py-2 text-sm font-medium transition-colors duration-200",
+                      "flex items-center rounded-md py-2 text-sm font-medium transition-colors duration-200 mb-1",
                       sidebarOpen ? "gap-3 px-3" : "justify-center px-2",
                       isActive
                         ? "bg-sidebar-accent text-sidebar-accent-foreground"

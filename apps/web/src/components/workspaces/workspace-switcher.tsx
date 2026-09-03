@@ -64,7 +64,7 @@ const WorkspaceSwitcher = ({ className }: WorkspaceProps) => {
       </Button>
 
       {open && (
-        <div className="absolute left-4 top-full z-50 mt-2 w-56 rounded-md border border-border bg-popover p-1 shadow-md">
+        <div className="absolute left-0 top-full z-50 mt-2 w-56 rounded-md border border-border bg-popover p-1 shadow-md">
           {workspaces.map((workspace) => (
             <Button
               className="w-full flex justify-between!"
