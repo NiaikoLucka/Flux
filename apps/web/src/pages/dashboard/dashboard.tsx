@@ -1,3 +1,4 @@
+import { Spinner } from "../../components/ui/spinner";
 import WorkspaceTest from "../workspace/workspace.test";
 
 const dashboard = () => {
@@ -5,6 +6,7 @@ const dashboard = () => {
     <>
       <div>dashboard</div>
       <WorkspaceTest />
+      <Spinner/>
     </>
   );
 };

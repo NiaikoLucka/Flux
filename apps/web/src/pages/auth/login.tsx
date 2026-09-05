@@ -13,6 +13,7 @@ import Button from "../../components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { useSession } from "../../hooks/use-session";
 import { authService } from "../../services/auth.service";
+import { Spinner } from "../../components/ui/spinner";
 
 type FormError = Partial<Record<keyof LoginForm, string>>;
 
@@ -36,7 +37,7 @@ const LoginPage = () => {
   }, [session, navigate]);
 
   if (isPending) {
-    return <div>Chargement...</div>;
+    return <div className="flex items-center justify-center w-full h-screen">Chargement...</div>;
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +148,15 @@ const LoginPage = () => {
           </div>
 
           <Button type="submit" disabled={isLoading} className=" w-full mt-3">
-            {isLoading ? "Connexion..." : "Se connecter"}
+            {isLoading ? (
+              <>
+                <Spinner className="stroke-background px-2" size={18} />
+                <span>Connexion ...</span>
+              </>
+            ) : (
+              "Se connecter"
+            )}
+            {/* {true && } */}
           </Button>
         </form>
 
