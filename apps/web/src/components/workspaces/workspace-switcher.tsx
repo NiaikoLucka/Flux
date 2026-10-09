@@ -19,16 +19,17 @@ const WorkspaceSwitcher = ({ className }: WorkspaceProps) => {
   const { data: workspaces = [], isPending } = useWorkspaces();
 
   const userId = session?.user.id;
-  const worksapceId = useAppStore((state) =>
+  const workspaceId = useAppStore((state) =>
     userId ? state.selectedWorkspaceByUser[userId] : null,
   );
   const setWorkspaceId = useAppStore((state) => state.setWorkspaceId);
   const activeWorkspace = workspaces.find(
-    (workspace) => workspace.id === worksapceId,
+    (workspace) => workspace.id === workspaceId,
   );
 
   console.log("workspace:", workspaces);
-  console.log("workspaceId: ", worksapceId);
+  console.log("workspaceId: ", workspaceId);
+  console.log("WorkspaceSwitcher workspaceId:", workspaceId);
 
   console.log("active workspace:", activeWorkspace);
 
@@ -71,7 +72,7 @@ const WorkspaceSwitcher = ({ className }: WorkspaceProps) => {
               variant="ghost"
               onClick={() => handleSelectWorkspace(workspace.id)}>
               <span>{workspace.name}</span>
-              {workspace.id === worksapceId && <Check className="size-4" />}
+              {workspace.id === workspaceId && <Check className="size-4" />}
             </Button>
           ))}
           <div className="my-1 h-px bg-border" />
