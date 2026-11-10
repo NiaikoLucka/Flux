@@ -5,7 +5,7 @@ export type FinancialAccount = {
   workspaceId: string;
   name: string;
   type: AccountType;
-  balance: number;
+  initialBalance: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -13,4 +13,5 @@ export type FinancialAccount = {
 export type CreateAccountInput = {
   name: string;
   type: AccountType;
+  initialBalance : number;
 };
