@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { creatAccount, getAccounts } from "../services/Accounts.service";
+import {
+  creatAccount,
+  deleteAccount,
+  getAccounts,
+  updateAccount,
+} from "../services/Accounts.service";
 import type { CreateAccountInput } from "../types/account.types";
 
 export const accountsKeys = {
@@ -30,19 +35,68 @@ export const useCreateAccount = (workspaceId: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data : CreateAccountInput) => {
-      if(!workspaceId){
-        throw new Error("Workspace ID manquant")
+    mutationFn: (data: CreateAccountInput) => {
+      if (!workspaceId) {
+        throw new Error("Workspace ID manquant");
       }
-      return creatAccount(workspaceId, data)
+      return creatAccount(workspaceId, data);
     },
 
-    onSuccess: ()=>{
-      if (workspaceId){
+    onSuccess: () => {
+      if (workspaceId) {
         queryClient.invalidateQueries({
-          queryKey: accountsKeys.list(workspaceId)
-        })
+          queryKey: accountsKeys.list(workspaceId),
+        });
       }
-    }
-  })
-}
+    },
+  });
+};
+
+export const useUpdateAccount = (workspaceId: string | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      accountId,
+      data,
+    }: {
+      accountId: string;
+      data: CreateAccountInput;
+    }) => {
+      if (!workspaceId) {
+        throw new Error("Workspace ID manquant");
+      }
+      return updateAccount(workspaceId, accountId, data);
+    },
+
+    onSuccess: async () => {
+      if (workspaceId) {
+        await queryClient.invalidateQueries({
+          queryKey: accountsKeys.list(workspaceId),
+        });
+      }
+    },
+  });
+};
+
+export const useDeleteAccount = (workspaceId: string | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (accountId: string) => {
+      if (!workspaceId) {
+        throw new Error("Workspace ID manquant");
+      }
+
+      return deleteAccount(workspaceId, accountId);
+    },
+
+    onSuccess: async () => {
+      if (workspaceId) {
+        await queryClient.invalidateQueries({
+          queryKey: accountsKeys.list(workspaceId),
+        });
+      }
+    },
+  });
+};

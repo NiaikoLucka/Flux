@@ -5,16 +5,23 @@ import {
   createAccountSchema,
   type CreateAccountForm,
 } from "../../schema/account.schema";
-import { useCreateAccount } from "../../queries/account.queries";
+import type { FinancialAccount } from "../../types/account.types";
+import {
+  useCreateAccount,
+  useUpdateAccount,
+} from "../../queries/account.queries";
 import Input from "../ui/input";
 import Button from "../ui/button";
 
 type AccountFormProps = {
   workspaceId: string;
+  account?: FinancialAccount;
   onSuccess: () => void;
 };
 
-const AccountForm = ({ workspaceId, onSuccess }: AccountFormProps) => {
+const AccountForm = ({ workspaceId, account, onSuccess }: AccountFormProps) => {
+  const isEditing = Boolean(account);
+
   const {
     register,
     handleSubmit,
@@ -23,17 +30,29 @@ const AccountForm = ({ workspaceId, onSuccess }: AccountFormProps) => {
   } = useForm<CreateAccountForm>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: {
-      name: "",
-      type: "BANK",
-      initialBalance: 0,
+      name: account?.name ?? "",
+      type: account?.type ?? "BANK",
+      initialBalance: account ? Number(account.initialBalance) : 0,
     },
   });
 
-  const { mutateAsync, isPending, error } = useCreateAccount(workspaceId);
+  const creatMutation = useCreateAccount(workspaceId);
+  const updateMutation = useUpdateAccount(workspaceId);
+
+  const isPending = creatMutation.isPending || updateMutation.isPending;
+
+  const error = creatMutation.error ?? updateMutation.error;
 
   const onSubmit = async (data: CreateAccountForm) => {
     try {
-      await mutateAsync(data);
+      if (account) {
+        await updateMutation.mutateAsync({
+          accountId: account.id,
+          data,
+        });
+      } else {
+        await creatMutation.mutateAsync(data);
+      }
       reset();
       onSuccess();
     } catch {
@@ -62,8 +81,8 @@ const AccountForm = ({ workspaceId, onSuccess }: AccountFormProps) => {
           id="type"
           {...register("type")}
           disabled={isPending}
-          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm">
-          <option value="CASH">Espèces</option>
+          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground">
+          <option value="CASH" >Espèces</option>
           <option value="BANK">Compte bancaire</option>
           <option value="MOBILE_MONEY">Mobile Money</option>
         </select>
@@ -95,7 +114,13 @@ const AccountForm = ({ workspaceId, onSuccess }: AccountFormProps) => {
       )}
 
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? "Création..." : "Créer le compte"}
+        {isPending
+          ? isEditing
+            ? "Modification..."
+            : "Création..."
+          : isEditing
+            ? "Enregistrer les modifications"
+            : "Créer le compte"}
       </Button>
     </form>
   );

@@ -29,3 +29,24 @@ export const creatAccount = async (
 
   return response.data;
 };
+
+export const updateAccount = async (
+  workspaceId: string,
+  accountId: string,
+  data: CreateAccountInput,
+) :Promise <FinancialAccount> =>{ 
+  const response = await api.patch(
+    `/workspaces/${workspaceId}/financial_accounts/${accountId}`,
+    data,
+  );
+  return response.data;
+}
+
+export const deleteAccount = async (
+  workspaceId: string,
+  accountId: string,
+): Promise<void> => {
+  await api.delete(
+    `/workspaces/${workspaceId}/financial_accounts/${accountId}`,
+  );
+};

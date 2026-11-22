@@ -4,13 +4,22 @@ import { useState } from "react";
 import AccountForm from "../../components/accounts/account-form";
 import { useSession } from "../../hooks/use-session";
 import { useAppStore } from "../../stores/app.store";
-import { useAccount } from "../../queries/account.queries";
+import { useAccount, useDeleteAccount } from "../../queries/account.queries";
 import Modal from "../../components/ui/modal";
 import Button from "../../components/ui/button";
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import type { FinancialAccount } from "../../types/account.types";
+import Card from "../../components/ui/card";
 
 const AccountsPage = () => {
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const [accountToEdit, setAccountToEdit] = useState<FinancialAccount | null>(
+    null,
+  );
+
+  const [accountToDelete, setAccountToDelete] =
+    useState<FinancialAccount | null>(null);
 
   const { data: session } = useSession();
   const userId = session?.user.id;
@@ -21,11 +30,30 @@ const AccountsPage = () => {
 
   const { data: accounts = [], isPending, isError } = useAccount(workspaceId);
 
+  const {
+    mutateAsync: deleteAccount,
+    isPending: isDeleting,
+    error: deleteError,
+  } = useDeleteAccount(workspaceId);
+
+  const handleDelete = async () => {
+    if (!accountToDelete) {
+      return;
+    }
+
+    try {
+      await deleteAccount(accountToDelete.id);
+      setAccountToDelete(null);
+    } catch {
+      // deleteError est affichée dans la modale.
+    }
+  };
+
   if (!workspaceId) {
     return <p>Sélectionnez un workspace avant de créer un compte.</p>;
   }
 
-    if (isPending) {
+  if (isPending) {
     return <p>Chargement des comptes...</p>;
   }
 
@@ -58,18 +86,47 @@ const AccountsPage = () => {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {accounts.map((account) => (
-            <article
+            <Card
               key={account.id}
-              className="rounded-lg border border-border bg-card p-4"
-            >
-              <p className="font-semibold">{account.name}</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {account.type}
-              </p>
+              className="p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-semibold">{account.name}</p>
+
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {account.type.toLocaleLowerCase()}
+                  </p>
+                </div>
+
+                <div className="flex gap-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setAccountToEdit(account)}
+                    aria-label={`Modifier ${account.name}`}>
+                    <Pencil className="size-4" />
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setAccountToDelete(account)}
+                    aria-label={`Supprimer ${account.name}`}>
+                    <Trash2 className="size-4 text-destructive" />
+                  </Button>
+                </div>
+              </div>
+
               <p className="mt-4 text-lg font-medium">
-                Solde initial : {account.initialBalance}
+                Solde initial :{" "}
+                {Number(account.initialBalance).toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </p>
-            </article>
+            </Card>
           ))}
         </div>
       )}
@@ -77,12 +134,67 @@ const AccountsPage = () => {
       <Modal
         open={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title="Ajouter un compte"
-      >
+        title="Ajouter un compte">
         <AccountForm
           workspaceId={workspaceId}
           onSuccess={() => setIsCreateModalOpen(false)}
         />
+      </Modal>
+      <Modal
+        open={Boolean(accountToEdit)}
+        onClose={() => setAccountToEdit(null)}
+        title="Modifier le compte">
+        {accountToEdit && (
+          <AccountForm
+            key={accountToEdit.id}
+            workspaceId={workspaceId}
+            account={accountToEdit}
+            onSuccess={() => setAccountToEdit(null)}
+          />
+        )}
+      </Modal>
+
+      <Modal
+        open={Boolean(accountToDelete)}
+        onClose={() => setAccountToDelete(null)}
+        title="Supprimer le compte">
+        {accountToDelete && (
+          <div className="space-y-5">
+            <p>
+              Voulez-vous vraiment supprimer le compte{" "}
+              <strong>{accountToDelete.name}</strong> ?
+            </p>
+
+            <p className="text-sm text-muted-foreground">
+              Cette action est irréversible.
+            </p>
+
+            {deleteError && (
+              <p className="text-sm text-destructive">
+                Impossible de supprimer ce compte. Il possède peut-être déjà des
+                transactions.
+              </p>
+            )}
+
+            <div className="flex justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setAccountToDelete(null)}
+                disabled={isDeleting}>
+                Annuler
+              </Button>
+
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isDeleting}>
+                {isDeleting ? "Suppression..." : "Supprimer"}
+              </Button>
+            </div>
+          </div>
+        )}
       </Modal>
     </section>
   );
