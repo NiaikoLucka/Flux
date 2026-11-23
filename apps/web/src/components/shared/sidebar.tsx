@@ -3,14 +3,12 @@ import {
   LayoutDashboard,
   PanelLeft,
   Settings,
-  Users,
   Wallet,
 } from "lucide-react";
 
 import { NavLink } from "react-router";
 import { useAppStore } from "../../stores/app.store";
 import clsx from "clsx";
-import WorkspaceSwitcher from "../workspaces/workspace-switcher";
 
 interface SidebarProps {
   onSettingsClick: () => void;
@@ -31,11 +29,6 @@ const navigation = [
     label: "Transactions",
     href: "/transactions",
     icon: ArrowLeftRight,
-  },
-  {
-    label: "Workspace",
-    href: "/workspace",
-    icon: Users,
   },
 ];
 
@@ -72,25 +65,9 @@ const Sidebar = ({ onSettingsClick }: SidebarProps) => {
           </button>
         </div>
 
-        <div
-          className={clsx(
-            "px-4 py-2 w-full mt-2",
-            sidebarOpen ? "" : "hidden",
-          )}>
-          <p className="text-muted-foreground text-base ">Workspace</p>
-          <WorkspaceSwitcher className="mt-1" />
-        </div>
-
         {/* Navigation */}
-        <div className="flex-1 px-4 py-2">
-          <p
-            className={clsx(
-              "text-muted-foreground text-base",
-              sidebarOpen ? "" : "hidden",
-            )}>
-            Menu
-          </p>
-          <nav>
+        <div className="flex-1 px-4 py-2 ">
+          <nav className={clsx(sidebarOpen ? "mt-6" : "mt-0")}>
             {navigation.map((item) => {
               const Icon = item.icon;
 

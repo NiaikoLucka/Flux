@@ -47,13 +47,9 @@ const WorkspaceForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <div className="space-y-2">
-        <label
-          htmlFor="name"
-          className="text-sm block font-medium mb-2 text-muted-foreground">
-          Nom du workspace
-        </label>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label htmlFor="name">Nom du workspace</label>
 
         <Input
           id="name"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronDown, Plus } from "lucide-react";
+import { Check, ChevronRight, Plus } from "lucide-react";
 import { useWorkspaces } from "../../queries/workspace.queries";
 import { useAppStore } from "../../stores/app.store";
 import Button from "../ui/button";
@@ -49,23 +49,21 @@ const WorkspaceSwitcher = ({ className }: WorkspaceProps) => {
   };
   return (
     <div className={clsx("relative", className)}>
-      <Button
-        type="button"
-        variant="ghost"
+      <div
         onClick={() => setOpen((value) => !value)}
-        className="w-full flex justify-between!"
+        className="w-full flex justify-between! items-center cursor-pointer"
         >
         {/* <CurrentIcon className="size-4" /> */}
 
-        <span>{activeWorkspace?.name || "Selectionner un workspace"}</span>
-        <ChevronDown
+        <span className="text-sm">Changer de  workspace</span>
+        <ChevronRight
           className={`size-4 transition-transform
-            ${open ? "rotate-180" : ""}`}
+            ${open ? "rotate-90" : ""}`}
         />
-      </Button>
+      </div>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-2 w-56 rounded-md border border-border bg-popover p-1 shadow-md">
+        <div className="absolute right-50 top-full z-50 mt-0 w-56 rounded-md border border-border bg-popover p-1 shadow-md">
           {workspaces.map((workspace) => (
             <Button
               className="w-full flex justify-between!"
@@ -86,6 +84,7 @@ const WorkspaceSwitcher = ({ className }: WorkspaceProps) => {
           </Button>
         </div>
       )}
+      
     </div>
   );
 };

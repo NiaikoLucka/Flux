@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { authService } from "../../../services/auth.service";
 import { queryClient } from "../../../lib/query-client";
 import { workspaceKeys } from "../../../queries/workspace.queries";
+import WorkspaceSwitcher from "../../workspaces/workspace-switcher";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -58,6 +59,13 @@ const UserMenu = () => {
             <p className="truncate text-xs text-muted-foreground">
               {session?.user.email}
             </p>
+          </div>
+
+          <div className="px-3 py-2 w-full mt-2 border-border border-b text-sm">
+            <p className="text-muted-foreground mb-1">Workspace</p>
+            {/* TODO: gerer les button qui est necessaire a pour le workspace */}
+            <p>Gerer le workspace</p>
+            <WorkspaceSwitcher className="mt-1 px-0!" />
           </div>
 
           <button
