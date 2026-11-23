@@ -1,15 +1,18 @@
 import ThemeSelector from "../../components/settings/ThemeSelector";
-import Modal from "../../components/ui/modal";
 
-interface SettingsPageProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const SettingsPage = ({ open, onClose }: SettingsPageProps) => {
+const SettingsPage = () => {
   return (
-    <Modal open={open} onClose={onClose} title="Paramètres">
+    <div className="mx-auto max-w-6xl p-6">
       <section className="space-y-4">
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold">Paramètres</h1>
+
+          <p className="mt-1 text-sm text-muted-foreground">
+            Gérez votre compte et votre espace de travail.
+          </p>
+        </div>
+
+        {/* TODO: gerer le settings */}
         <div>
           <h2 className="text-lg font-semibold">Apparence</h2>
 
@@ -30,7 +33,7 @@ const SettingsPage = ({ open, onClose }: SettingsPageProps) => {
           <ThemeSelector />
         </div>
       </section>
-    </Modal>
+    </div>
   );
 };
 

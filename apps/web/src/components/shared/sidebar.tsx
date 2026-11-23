@@ -10,9 +10,6 @@ import { NavLink } from "react-router";
 import { useAppStore } from "../../stores/app.store";
 import clsx from "clsx";
 
-interface SidebarProps {
-  onSettingsClick: () => void;
-}
 
 const navigation = [
   {
@@ -32,7 +29,7 @@ const navigation = [
   },
 ];
 
-const Sidebar = ({ onSettingsClick }: SidebarProps) => {
+const Sidebar = () => {
   const sidebarOpen = useAppStore((state) => state.sidebarOpen);
   const toggleSidebar = useAppStore((state) => state.toggleSidebar);
 
@@ -96,9 +93,10 @@ const Sidebar = ({ onSettingsClick }: SidebarProps) => {
 
         {/* Settings */}
         <div className="border-t border-border p-4">
-          <button
+          <NavLink
+            key={"/settings"}
+            to={"/settings"}
             type="button"
-            onClick={onSettingsClick}
             title={!sidebarOpen ? "Paramètres" : undefined}
             className={clsx(
               "flex w-full items-center rounded-md py-2 text-sm font-medium transition-colors duration-200 cursor-pointer",
@@ -108,7 +106,7 @@ const Sidebar = ({ onSettingsClick }: SidebarProps) => {
             <Settings className="size-4 shrink-0" />
 
             {sidebarOpen && <span>Paramètres</span>}
-          </button>
+          </NavLink>
         </div>
       </div>
     </aside>
