@@ -14,6 +14,10 @@ import WorkspaceGate from "./workspace-gate";
 import NoWorkspacePage from "../components/workspaces/no-workspace";
 import CreateWorkspacePage from "../pages/workspace/creat-workspace";
 import SettingsPage from "../pages/settings/settings";
+import AccountsSettings from "../pages/settings/section/AccountsSettings";
+import WorkspaceSettings from "../pages/settings/section/WorkspaceSettings";
+import MembersSettings from "../pages/settings/section/MembersSettings";
+import AppearanceSettings from "../pages/settings/section/AppearanceSettings";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +67,28 @@ export const router = createBrowserRouter([
               {
                 path: "/settings",
                 element: <SettingsPage />,
+                children:[
+                  {
+                    index: true,
+                    element: <Navigate to="account" replace/>
+                  },
+                  {
+                    path: "account",
+                    element:<AccountsSettings/>
+                  },
+                  {
+                    path:"workspace",
+                    element:<WorkspaceSettings/>
+                  },
+                  {
+                    path:"members",
+                    element:<MembersSettings/>
+                  },
+                  {
+                    path:"appearance",
+                    element:<AppearanceSettings/>
+                  }
+                ]
               },
             ],
           },

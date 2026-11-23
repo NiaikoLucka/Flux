@@ -1,4 +1,7 @@
-import ThemeSelector from "../../components/settings/ThemeSelector";
+
+import SettingsSideBar from '../../components/settings/settingsSideBar';
+import { Outlet } from 'react-router';
+import Card from '../../components/ui/card';
 
 const SettingsPage = () => {
   return (
@@ -13,25 +16,14 @@ const SettingsPage = () => {
         </div>
 
         {/* TODO: gerer le settings */}
-        <div>
-          <h2 className="text-lg font-semibold">Apparence</h2>
+        <div className="flex items-start gap-10">
+          <SettingsSideBar />
 
-          <p className="text-sm text-muted-foreground">
-            Personnalisez l'apparence de l'application.
-          </p>
+          <Card className='min-w-0 flex-1 w-full h-auto px-4 py-2'>
+            <Outlet/>
+          </Card>
         </div>
-
-        <div className="flex items-center justify-between  border-t border-border p-4">
-          <div>
-            <h3 className="text-sm font-medium">Thème</h3>
-
-            <p className="text-sm text-muted-foreground">
-              Choisissez le thème de l'application.
-            </p>
-          </div>
-
-          <ThemeSelector />
-        </div>
+        
       </section>
     </div>
   );
